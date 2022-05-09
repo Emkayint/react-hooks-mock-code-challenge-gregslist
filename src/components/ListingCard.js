@@ -2,15 +2,25 @@ import React from "react";
 import { useState } from "react";
 
 
-function ListingCard({ id, description, image, location }) {
+function ListingCard({description, image, location, id }) {
+  // console.log(id)
   const [star, setStar] = useState(true)
+  const [attr, setAttr] = useState('card')
+
 
   function handleClick(){
     setStar(!star)
   }
 
+  function handleDelete(){
+    setAttr("card none")
+    fetch(`http://localhost:3000/listings/${id}`, {
+      method : "DELETE"
+    })
+  }
+
   return (
-    <li className="card" key={id}>
+    <li className={attr}>
       <div className="image">
         <span className="price">$0</span>
         <img src={image} alt={description} />
@@ -25,7 +35,7 @@ function ListingCard({ id, description, image, location }) {
         </div>
         <strong>{description}</strong>
         <span> · { location }</span>
-        <button className="emoji-button delete">🗑</button>
+        <button className="emoji-button delete" onClick={ handleDelete }>🗑</button>
       </div>
     </li>
   );

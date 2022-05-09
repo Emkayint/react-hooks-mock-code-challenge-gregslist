@@ -1,26 +1,34 @@
 import React from "react";
-// import ListingCard from "./ListingCard";
 import { useState, useEffect } from "react";
 import ListingCard from "./ListingCard";
 
-
-
-function ListingsContainer() {
+function ListingsContainer({ filterWiths, handleDelete }) {
   const [items, setItems] = useState([])
-
+  console.log(`Filter Width : ${ filterWiths }`)
   useEffect(() => {
-    fetch("http://localhost:6001/listings")
+    fetch("http://localhost:3000/listings")
     .then(res => res.json())
     .then( res => {
       setItems(res)
     })
   }, [])
 
-  const itemToPost = items.map(item => (
-    <ListingCard id = {item.id}
-     description = {item.description} 
-     image = {item.image} 
-     location = {item.location} 
+  const filteredItems = items.filter(data => {
+    if(filterWiths === "all"){
+      return true
+    } else {
+      return data.description.toLowerCase().search(filterWiths) >= 0
+    }
+  })
+
+  const itemToPost = filteredItems.map(item => (
+    <ListingCard 
+      handleDelete = { handleDelete }
+      id = {item.id}
+      key = {item.id}
+      description = {item.description} 
+      image = {item.image} 
+      location = {item.location} 
     />
   ))
 
